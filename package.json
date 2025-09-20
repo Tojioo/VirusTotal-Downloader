@@ -1,0 +1,23 @@
+{
+  "name": "virustotal-downloader",
+  "version": "1.0.0",
+  "description": "Browser extension for downloading files and scanning them with VirusTotal via right-click context menu",
+  "author": "VirusTotal Downloader Team",
+  "keywords": [
+    "browser-extension",
+    "virustotal",
+    "malware-scanner",
+    "file-download",
+    "security",
+    "chrome-extension"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tojioo/VirusTotal-Downloader.git"
+  },
+  "license": "MIT"
+}

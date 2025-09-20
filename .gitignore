@@ -1,0 +1,29 @@
+﻿# Exclude IDE configurations to prevent conflicts between different development environments
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Protect user credentials from accidental exposure in version control
+apikey.txt
+
+# Exclude development testing files to keep production repository clean
+tests/
+
+# Exclude development utilities that aren't part of the distributed extension
+create_icons.html
+
+# Exclude system-generated files that cause cross-platform compatibility issues
+.DS_Store
+Thumbs.db
+
+# Exclude dependencies to maintain lean repository and prevent version conflicts
+node_modules/
+
+# Exclude compiled outputs that should be generated during deployment
+dist/
+build/
+
+# Exclude runtime logs that contain potentially sensitive user data
+*.log

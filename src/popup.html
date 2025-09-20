@@ -1,0 +1,1477 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VirusTotal Downloader</title>
+    <style>
+        body {
+            width: 350px;
+            min-height: 400px;
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 32px;
+            height: 32px;
+            background-color: #007bff;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        h1 {
+            font-size: 18px;
+            margin: 0;
+            color: #333;
+            flex: 1;
+        }
+
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            font-size: 14px;
+            margin: 0 0 10px 0;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .auto-remove-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+            background-color: white;
+            color: #495057;
+            cursor: pointer;
+            min-width: 100px;
+            transition: all 0.2s ease;
+        }
+
+        .auto-remove-select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.1);
+        }
+
+        .btn {
+            background-color: #20a085;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #1a8570;
+        }
+
+        .btn-small {
+            padding: 4px 8px;
+            font-size: 11px;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            padding: 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            transition: background-color 0.2s;
+        }
+
+        .btn-icon:hover {
+            background-color: #f0f0f0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .section-controls {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .collapse-btn {
+            background: none;
+            border: none;
+            padding: 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            transition: all 0.2s ease;
+        }
+
+        .collapse-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        .collapse-icon {
+            transition: transform 0.2s ease;
+        }
+
+        .collapse-btn.collapsed .collapse-icon {
+            transform: rotate(-90deg);
+        }
+
+        .section-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .section-content.collapsed {
+            max-height: 0;
+            padding: 0;
+            margin: 0;
+        }
+
+        .status {
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .scan-item {
+            position: relative;
+            padding: 12px 40px 40px 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 12px;
+            max-width: 100%;
+            overflow: hidden;
+            transition: background-color 0.2s ease;
+            border-radius: 6px;
+            margin-bottom: 2px;
+            min-height: 40px;
+        }
+
+        .scan-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .scan-item:last-child {
+            border-bottom: none;
+        }
+
+        .scan-filename {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            max-width: 100%;
+            overflow: hidden;
+            font-size: 13px;
+        }
+
+        .file-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+        }
+
+        /* File type icon CSS custom properties for theming */
+        :root {
+            /* Light theme icon colors */
+            --icon-bg-image: #e3f2fd;
+            --icon-stroke-image: #2196f3;
+            --icon-bg-video: #f3e5f5;
+            --icon-stroke-video: #9c27b0;
+            --icon-bg-audio: #e8f5e8;
+            --icon-stroke-audio: #4caf50;
+            --icon-bg-document: #fff3e0;
+            --icon-stroke-document: #ff9800;
+            --icon-bg-spreadsheet: #e0f2f1;
+            --icon-stroke-spreadsheet: #009688;
+            --icon-bg-presentation: #ffebee;
+            --icon-stroke-presentation: #f44336;
+            --icon-bg-archive: #efebe9;
+            --icon-stroke-archive: #795548;
+            --icon-bg-executable: #ffcdd2;
+            --icon-bg-executable-alt: #ffebee;
+            --icon-stroke-executable: #f44336;
+            --icon-bg-web: #e8eaf6;
+            --icon-stroke-web: #3f51b5;
+            --icon-bg-default: #f5f5f5;
+            --icon-stroke-default: #9e9e9e;
+        }
+
+        .filename-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+            line-height: 1.2;
+        }
+
+        .scan-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #6c757d;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .scan-time {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            color: #868e96;
+            font-weight: 400;
+            font-size: 11px;
+        }
+
+        .scan-buttons {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0;
+        }
+
+        .icon-btn:hover {
+            background-color: #e9ecef;
+            transform: translateY(-1px);
+        }
+
+        .icon-btn:active {
+            transform: translateY(0);
+        }
+
+        .icon-btn img {
+            width: 16px;
+            height: 16px;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+
+        .icon-btn:hover img {
+            opacity: 1;
+        }
+
+        .icon-btn-report {
+            background-color: #e3f2fd;
+        }
+
+        .icon-btn-report:hover {
+            background-color: #bbdefb;
+        }
+
+        .icon-btn-external {
+            background-color: #f3e5f5;
+        }
+
+        .icon-btn-external:hover {
+            background-color: #e1bee7;
+        }
+
+        .icon-btn-download {
+            background-color: #e8f5e8;
+        }
+
+        .icon-btn-download:hover {
+            background-color: #c8e6c9;
+        }
+
+        .delete-scan-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            background-color: #ffebee;
+            border: 1px solid #ffcdd2;
+        }
+
+        .delete-scan-btn:hover {
+            background-color: #ffcdd2;
+            transform: translateY(-1px);
+        }
+
+        .delete-scan-btn svg {
+            stroke: #d32f2f;
+        }
+
+        .delete-scan-btn:hover svg {
+            stroke: #b71c1c;
+        }
+
+        .scan-link {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 11px;
+        }
+
+        .scan-link:hover {
+            text-decoration: underline;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            padding: 20px;
+        }
+
+        .instructions {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.4;
+            margin-top: 10px;
+        }
+
+        .config-item {
+            padding: 12px;
+            margin-bottom: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+
+        .config-item:hover {
+            background: #e9ecef;
+        }
+
+        .config-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .config-info {
+            margin-bottom: 8px;
+        }
+
+        .config-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 2px;
+            line-height: 1.2;
+        }
+
+        .config-description {
+            font-size: 11px;
+            color: #6c757d;
+            line-height: 1.3;
+        }
+
+        .access-level-display {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #495057;
+            text-align: center;
+        }
+
+        .config-control {
+            margin-top: 8px;
+        }
+
+        .api-key-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 13px;
+            background: #fff;
+            transition: all 0.2s ease;
+            font-family: 'Courier New', monospace;
+        }
+
+        .api-key-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.1);
+        }
+
+        .config-actions {
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .config-help {
+            margin-top: 12px;
+            padding: 12px;
+            background: #e8f4fd;
+            border: 1px solid #bee5eb;
+            border-radius: 6px;
+        }
+
+        .help-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #0c5460;
+            margin-bottom: 4px;
+        }
+
+        .help-description {
+            font-size: 11px;
+            color: #0c5460;
+            line-height: 1.4;
+        }
+
+        .help-description a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .help-description a:hover {
+            text-decoration: underline;
+        }
+
+        .scroll-container {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        /* Sleek scrollbar styles */
+        .scroll-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+        }
+
+        .scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+
+        .setting-item:hover {
+            background: #e9ecef;
+        }
+
+        .setting-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .setting-info {
+            flex: 1;
+        }
+
+        .setting-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 2px;
+            line-height: 1.2;
+        }
+
+        .setting-description {
+            font-size: 11px;
+            color: #6c757d;
+            line-height: 1.3;
+        }
+
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toggle-status {
+            font-size: 11px;
+            font-weight: 500;
+            color: #6c757d;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 22px;
+            background-color: #ddd;
+            border-radius: 11px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #ccc;
+        }
+
+        .toggle-switch.active {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            width: 18px;
+            height: 18px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(22px);
+        }
+
+        .toggle-switch.active .toggle-status {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .progress-container {
+            margin-bottom: 10px;
+        }
+
+        .quota-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+
+        .quota-item:hover {
+            background: #e9ecef;
+        }
+
+        .quota-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .quota-info {
+            margin-bottom: 8px;
+        }
+
+        .quota-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 2px;
+            line-height: 1.2;
+        }
+
+        .quota-description {
+            font-size: 11px;
+            color: #6c757d;
+            line-height: 1.3;
+        }
+
+        .quota-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .quota-usage {
+            font-size: 11px;
+            font-weight: 600;
+            color: #495057;
+            text-align: right;
+        }
+
+        .quota-actions {
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 3px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: #dee2e6;
+            border: 1px solid #ced4da;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #007bff;
+            transition: width 0.3s ease;
+            border-radius: 3px;
+        }
+
+        .progress-fill.warning {
+            background-color: #ffc107;
+        }
+
+        .progress-fill.danger {
+            background-color: #dc3545;
+        }
+
+        .quota-section {
+            display: none;
+        }
+
+        .quota-section.visible {
+            display: block;
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            
+            /* Dark theme icon colors with better contrast */
+            --icon-bg-image: #1e3a5f;
+            --icon-stroke-image: #4fc3f7;
+            --icon-bg-video: #4a2c54;
+            --icon-stroke-video: #ce93d8;
+            --icon-bg-audio: #2c4a2c;
+            --icon-stroke-audio: #81c784;
+            --icon-bg-document: #5a4a2c;
+            --icon-stroke-document: #ffb74d;
+            --icon-bg-spreadsheet: #2c4a4a;
+            --icon-stroke-spreadsheet: #4db6ac;
+            --icon-bg-presentation: #4a2c2c;
+            --icon-stroke-presentation: #f48fb1;
+            --icon-bg-archive: #3e352c;
+            --icon-stroke-archive: #a1887f;
+            --icon-bg-executable: #4a2c2c;
+            --icon-bg-executable-alt: #3a2222;
+            --icon-stroke-executable: #f48fb1;
+            --icon-bg-web: #2c2f4a;
+            --icon-stroke-web: #7986cb;
+            --icon-bg-default: #404040;
+            --icon-stroke-default: #bdbdbd;
+        }
+
+        body.dark-mode .section {
+            background: #2d2d2d;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        body.dark-mode h1 {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .section h2 {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode input[type="text"], 
+        body.dark-mode input[type="password"] {
+            background-color: #404040;
+            border: 1px solid #555;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode input[type="text"]:focus, 
+        body.dark-mode input[type="password"]:focus {
+            border-color: #007bff;
+        }
+
+        body.dark-mode .auto-remove-select {
+            background-color: #404040;
+            border: 1px solid #555;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .auto-remove-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
+        }
+
+        body.dark-mode .btn {
+            background-color: #1a8570;
+        }
+
+        body.dark-mode .btn:hover {
+            background-color: #147a61;
+        }
+
+        body.dark-mode .scan-item {
+            border-bottom: 1px solid #444;
+        }
+
+        body.dark-mode .scan-item:hover {
+            background-color: #333;
+        }
+
+        body.dark-mode .scan-filename {
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .filename-text {
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .scan-details {
+            color: #adb5bd;
+        }
+
+        body.dark-mode .scan-time {
+            color: #9ca3af;
+        }
+
+        body.dark-mode .scan-link {
+            color: #4d9fff;
+        }
+
+        body.dark-mode .empty-state {
+            color: #888;
+        }
+
+        body.dark-mode .instructions {
+            color: #b0b0b0;
+        }
+        
+        body.dark-mode .instructions a {
+            color: #4d9fff;
+        }
+        
+        body.dark-mode .instructions a:hover {
+            color: #80b3ff;
+        }
+
+        body.dark-mode label {
+            color: #c0c0c0;
+        }
+
+        body.dark-mode .progress-bar {
+            background-color: #333;
+            border: 1px solid #555;
+        }
+
+        body.dark-mode .progress-label {
+            color: #b0b0b0;
+        }
+
+        /* Dark mode scrollbar styles */
+        body.dark-mode .scroll-container::-webkit-scrollbar-track {
+            background: #404040;
+        }
+
+        body.dark-mode .scroll-container::-webkit-scrollbar-thumb {
+            background: #666;
+        }
+
+        body.dark-mode .scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
+
+        /* Dark mode styles for new elements */
+        body.dark-mode .btn-icon {
+            color: #c0c0c0;
+        }
+
+        body.dark-mode .btn-icon:hover {
+            background-color: #404040;
+        }
+
+        body.dark-mode .collapse-btn {
+            color: #c0c0c0;
+        }
+
+        body.dark-mode .collapse-btn:hover {
+            background-color: #404040;
+        }
+
+        body.dark-mode .logo {
+            background-color: #0056b3;
+        }
+
+        /* Dark mode icon button styles */
+        body.dark-mode .icon-btn {
+            background-color: #404040;
+        }
+
+        body.dark-mode .icon-btn:hover {
+            background-color: #4a4a4a;
+        }
+
+        /* SVG icons inherit color through currentColor */
+        body.dark-mode .icon-btn svg {
+            color: #c0c0c0;
+        }
+
+        body.dark-mode .icon-btn-report {
+            background-color: #1e3a5f;
+        }
+
+        body.dark-mode .icon-btn-report:hover {
+            background-color: #2a4f7b;
+        }
+
+        body.dark-mode .icon-btn-external {
+            background-color: #4a2c54;
+        }
+
+        body.dark-mode .icon-btn-external:hover {
+            background-color: #5e3a68;
+        }
+
+        body.dark-mode .icon-btn-download {
+            background-color: #2c4a2c;
+        }
+
+        body.dark-mode .icon-btn-download:hover {
+            background-color: #3a5e3a;
+        }
+
+        body.dark-mode .delete-scan-btn {
+            background-color: #4a1e1e;
+            border-color: #6d2c2c;
+        }
+
+        body.dark-mode .delete-scan-btn:hover {
+            background-color: #5e2525;
+        }
+
+        body.dark-mode .delete-scan-btn svg {
+            stroke: #f44336;
+        }
+
+        body.dark-mode .delete-scan-btn:hover svg {
+            stroke: #ff6b6b;
+        }
+
+        /* Dark mode styles for new sections */
+        body.dark-mode .setting-item,
+        body.dark-mode .quota-item,
+        body.dark-mode .config-item {
+            background: #404040;
+            border: 1px solid #555;
+        }
+
+        body.dark-mode .setting-item:hover,
+        body.dark-mode .quota-item:hover,
+        body.dark-mode .config-item:hover {
+            background: #4a4a4a;
+        }
+
+        body.dark-mode .setting-title,
+        body.dark-mode .quota-title,
+        body.dark-mode .config-title {
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .setting-description,
+        body.dark-mode .quota-description,
+        body.dark-mode .config-description {
+            color: #adb5bd;
+        }
+
+        body.dark-mode .toggle-status {
+            color: #adb5bd;
+        }
+
+        body.dark-mode .toggle-switch {
+            background-color: #555;
+            border-color: #666;
+        }
+
+        body.dark-mode .toggle-switch.active {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        body.dark-mode .toggle-switch.active .toggle-status {
+            color: #28a745;
+        }
+
+        body.dark-mode .quota-usage {
+            color: #e9ecef;
+        }
+
+        body.dark-mode .access-level-display {
+            background: #555;
+            border-color: #666;
+            color: #e9ecef;
+        }
+
+        body.dark-mode .api-key-input {
+            background: #555;
+            border-color: #666;
+            color: #e9ecef;
+        }
+
+        body.dark-mode .api-key-input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
+        }
+
+        body.dark-mode .api-key-input::placeholder {
+            color: #adb5bd;
+        }
+
+        body.dark-mode .config-help {
+            background: #2c4a2c;
+            border-color: #3a5e3a;
+        }
+
+        body.dark-mode .help-title {
+            color: #a8d8a8;
+        }
+
+        body.dark-mode .help-description {
+            color: #a8d8a8;
+        }
+
+        body.dark-mode .help-description a {
+            color: #4d9fff;
+        }
+
+        body.dark-mode .help-description a:hover {
+            color: #80b3ff;
+        }
+
+        /* Secure API Key Storage Styles */
+        .storage-method-selector {
+            margin-bottom: 16px;
+        }
+
+        .method-option {
+            margin-bottom: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .method-option:hover {
+            border-color: #007bff;
+            background-color: #f8f9fa;
+        }
+
+        .method-option input[type="radio"] {
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        .method-option label {
+            cursor: pointer;
+            margin: 0;
+            display: block;
+        }
+
+        .method-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 2px;
+        }
+
+        .method-desc {
+            font-size: 11px;
+            color: #6c757d;
+            line-height: 1.3;
+        }
+
+        .method-option input[type="radio"]:checked + label .method-title {
+            color: #007bff;
+        }
+
+        .method-option:has(input[type="radio"]:checked) {
+            border-color: #007bff;
+            background-color: #e3f2fd;
+        }
+
+        .storage-config {
+            transition: opacity 0.3s ease;
+        }
+
+        .file-picker-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+
+        .file-status {
+            font-size: 12px;
+            color: #6c757d;
+            font-style: italic;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .file-status.selected {
+            color: #28a745;
+            font-weight: 500;
+        }
+
+        .security-info {
+            margin-top: 16px;
+            padding: 16px;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .security-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 8px;
+        }
+
+        .security-description {
+            font-size: 11px;
+            color: #856404;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .security-tips {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .security-tips li {
+            font-size: 11px;
+            color: #856404;
+            line-height: 1.3;
+            margin-bottom: 4px;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .security-tips li:before {
+            content: "🔒";
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* Dark mode styles for secure storage UI */
+        body.dark-mode .method-option {
+            border-color: #555;
+            background-color: #404040;
+        }
+
+        body.dark-mode .method-option:hover {
+            border-color: #007bff;
+            background-color: #4a4a4a;
+        }
+
+        body.dark-mode .method-option:has(input[type="radio"]:checked) {
+            border-color: #007bff;
+            background-color: #1e3a5f;
+        }
+
+        body.dark-mode .method-title {
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .method-desc {
+            color: #adb5bd;
+        }
+
+        body.dark-mode .method-option input[type="radio"]:checked + label .method-title {
+            color: #4d9fff;
+        }
+
+        body.dark-mode .btn-secondary {
+            background-color: #495057;
+        }
+
+        body.dark-mode .btn-secondary:hover {
+            background-color: #3d4348;
+        }
+
+        body.dark-mode .file-status {
+            color: #adb5bd;
+        }
+
+        body.dark-mode .file-status.selected {
+            color: #28a745;
+        }
+
+        body.dark-mode .security-info {
+            background: #4a3c1a;
+            border-color: #6d5228;
+            border-left-color: #ffc107;
+        }
+
+        body.dark-mode .security-title {
+            color: #ffd43b;
+        }
+
+        body.dark-mode .security-description,
+        body.dark-mode .security-tips li {
+            color: #ffd43b;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VirusTotal Downloader</h1>
+        <div class="logo">VT</div>
+    </div>
+
+    <div class="section">
+        <div class="section-header" data-section="recent-scans">
+            <h2>Recent Scans</h2>
+            <div class="section-controls">
+                <button class="btn-icon" id="refreshHistory" title="Refresh">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                        <path d="M21 3v5h-5"/>
+                        <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                        <path d="M3 21v-5h5"/>
+                    </svg>
+                </button>
+                <button class="collapse-btn" data-target="recent-scans-content">
+                    <svg class="collapse-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="section-content" id="recent-scans-content">
+            <div class="scroll-container">
+                <div id="scanHistory">
+                    <div class="empty-state">No scans yet</div>
+                </div>
+                <button id="showMoreScans" class="btn btn-small" style="display: none; width: 100%; margin-top: 10px;">Show more</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header" data-section="settings">
+            <h2>Settings</h2>
+            <button class="collapse-btn" data-target="settings-content">
+                <svg class="collapse-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9l6 6 6-6"/>
+                </svg>
+            </button>
+        </div>
+        <div class="section-content" id="settings-content">
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-title">Always Show Report</div>
+                    <div class="setting-description">Automatically open scan results in new tab</div>
+                </div>
+                <div class="setting-control">
+                    <span class="toggle-status" id="showReportText">Off</span>
+                    <div class="toggle-switch" id="showReportToggle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-title">Download Automatically</div>
+                    <div class="setting-description">Start download immediately after scanning</div>
+                </div>
+                <div class="setting-control">
+                    <span class="toggle-status" id="downloadBehaviorText">Off</span>
+                    <div class="toggle-switch" id="downloadBehaviorToggle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-title">Enable Dark Mode</div>
+                    <div class="setting-description">Switch to dark theme for better visibility</div>
+                </div>
+                <div class="setting-control">
+                    <span class="toggle-status" id="darkModeText">Off</span>
+                    <div class="toggle-switch" id="darkModeToggle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-title">Auto-remove Scans</div>
+                    <div class="setting-description">Automatically remove old scans from history</div>
+                </div>
+                <div class="setting-control">
+                    <select id="autoRemoveSelect" class="auto-remove-select" aria-label="Auto-remove scans after">
+                        <option value="never">Never</option>
+                        <option value="1">1 day</option>
+                        <option value="3">3 days</option>
+                        <option value="7" selected>1 week</option>
+                        <option value="30">1 month</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section quota-section" id="quotaSection">
+        <div class="section-header" data-section="api-usage">
+            <h2>API Usage</h2>
+            <button class="collapse-btn" data-target="api-usage-content">
+                <svg class="collapse-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9l6 6 6-6"/>
+                </svg>
+            </button>
+        </div>
+        <div class="section-content" id="api-usage-content">
+            <div class="quota-item">
+                <div class="quota-info">
+                    <div class="quota-title">Daily Quota</div>
+                    <div class="quota-description">API requests used today</div>
+                </div>
+                <div class="quota-stats">
+                    <div class="quota-usage" id="dailyUsageText">0 / 500</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="dailyProgress"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="quota-item">
+                <div class="quota-info">
+                    <div class="quota-title">Monthly Quota</div>
+                    <div class="quota-description">API requests used this month</div>
+                </div>
+                <div class="quota-stats">
+                    <div class="quota-usage" id="monthlyUsageText">0 / 15,500</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="monthlyProgress"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header" data-section="api-config">
+            <h2>API Configuration</h2>
+            <button class="collapse-btn" data-target="api-config-content">
+                <svg class="collapse-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9l6 6 6-6"/>
+                </svg>
+            </button>
+        </div>
+        <div class="section-content" id="api-config-content">
+            <div class="config-item">
+                <div class="config-info">
+                    <div class="config-title">Access Level</div>
+                    <div class="config-description">Automatically detected based on API key</div>
+                </div>
+                <div class="access-level-display">
+                    <span id="accessLevelText">Auto-detecting...</span>
+                </div>
+            </div>
+            <div class="config-item">
+                <div class="config-info">
+                    <div class="config-title">API Key Storage Method</div>
+                    <div class="config-description">Choose how to securely store your VirusTotal API key</div>
+                </div>
+                <div class="storage-method-selector">
+                    <div class="method-option">
+                        <input type="radio" id="methodBrowser" name="storageMethod" value="browser" checked>
+                        <label for="methodBrowser">
+                            <div class="method-title">Browser Storage</div>
+                            <div class="method-desc">Store encrypted in browser (recommended for most users)</div>
+                        </label>
+                    </div>
+                    <div class="method-option">
+                        <input type="radio" id="methodFile" name="storageMethod" value="file">
+                        <label for="methodFile">
+                            <div class="method-title">External File</div>
+                            <div class="method-desc">Load from a secure file on your system</div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Default storage option balances security with user convenience -->
+            <div class="config-item storage-config" id="browserStorageConfig">
+                <div class="config-info">
+                    <div class="config-title">VirusTotal API Key</div>
+                    <div class="config-description">Enter your personal API key from VirusTotal</div>
+                </div>
+                <div class="config-control">
+                    <input type="password" id="apiKey" placeholder="Enter your API key" class="api-key-input">
+                </div>
+            </div>
+
+            <!-- External file option provides enhanced security for sensitive environments -->
+            <div class="config-item storage-config" id="fileStorageConfig" style="display: none;">
+                <div class="config-info">
+                    <div class="config-title">API Key File</div>
+                    <div class="config-description">Select a text file containing only your API key</div>
+                </div>
+                <div class="config-control file-picker-container">
+                    <input type="file" id="apiKeyFile" accept=".txt,.key,.api" style="display: none;" aria-label="Select API key file">
+                    <button class="btn btn-secondary" id="selectFileBtn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14,2 14,8 20,8"/>
+                        </svg>
+                        Choose File
+                    </button>
+                    <div class="file-status" id="fileStatus">No file selected</div>
+                </div>
+            </div>
+
+
+            <div class="config-actions">
+                <button class="btn" id="saveApiKey">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                        <polyline points="17,21 17,13 7,13 7,21"/>
+                        <polyline points="7,3 7,8 15,8"/>
+                    </svg>
+                    <span id="saveButtonText">Save API Key</span>
+                </button>
+                <div id="apiStatus"></div>
+            </div>
+            <div class="config-help">
+                <div class="help-title">Need an API key?</div>
+                <div class="help-description">
+                    Get your free API key from <a href="https://www.virustotal.com/gui/join-us" target="_blank">VirusTotal</a>. 
+                    Right-click on any link, image, video, or audio file and select "Download with VirusTotal" to scan files.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

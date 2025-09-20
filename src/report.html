@@ -1,0 +1,444 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VirusTotal Scan Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .header .logo {
+            width: 48px;
+            height: 48px;
+            background-color: #007bff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .header-info h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .header-info .filename {
+            font-size: 16px;
+            color: #666;
+            word-break: break-all;
+        }
+
+        .scan-summary {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .scan-summary h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .stat-number.danger {
+            color: #dc3545;
+        }
+
+        .stat-number.warning {
+            color: #ffc107;
+        }
+
+        .stat-number.success {
+            color: #28a745;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .scan-results {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .scan-results h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .detection-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detection-item:last-child {
+            border-bottom: none;
+        }
+
+        .detection-engine {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .detection-result {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .detection-result.clean {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .detection-result.malware {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .detection-result.suspicious {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .scan-metadata {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .scan-metadata h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .metadata-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .metadata-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .metadata-value {
+            font-size: 14px;
+            color: #333;
+            word-break: break-all;
+        }
+
+        .actions {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 0 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn.secondary {
+            background-color: #6c757d;
+        }
+
+        .btn.secondary:hover {
+            background-color: #545b62;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .no-data {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .header {
+            background: #2d2d2d;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        body.dark-mode .header-info h1 {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .header-info .filename {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode .scan-summary,
+        body.dark-mode .scan-results,
+        body.dark-mode .scan-metadata,
+        body.dark-mode .actions {
+            background: #2d2d2d;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        body.dark-mode .scan-summary h2,
+        body.dark-mode .scan-results h2,
+        body.dark-mode .scan-metadata h2 {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .stat-card {
+            background: #404040;
+        }
+
+        body.dark-mode .stat-label {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode .detection-item {
+            border-bottom: 1px solid #444;
+        }
+
+        body.dark-mode .detection-engine {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .detection-result.clean {
+            background-color: #1e4620;
+            color: #4caf50;
+        }
+
+        body.dark-mode .detection-result.malware {
+            background-color: #4a1e1e;
+            color: #f44336;
+        }
+
+        body.dark-mode .detection-result.suspicious {
+            background-color: #4a3c1e;
+            color: #ff9800;
+        }
+
+        body.dark-mode .metadata-label {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode .metadata-value {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .btn {
+            background-color: #0056b3;
+        }
+
+        body.dark-mode .btn:hover {
+            background-color: #004494;
+        }
+
+        body.dark-mode .btn.secondary {
+            background-color: #495057;
+        }
+
+        body.dark-mode .btn.secondary:hover {
+            background-color: #3d4348;
+        }
+
+        body.dark-mode .loading {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode .error {
+            background: #4a1e1e;
+            color: #f44336;
+            border: 1px solid #6d2c2c;
+        }
+
+        body.dark-mode .no-data {
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">VT</div>
+            <div class="header-info">
+                <h1>VirusTotal Scan Report</h1>
+                <div class="filename" id="filename">Loading...</div>
+            </div>
+        </div>
+
+        <div id="loadingMessage" class="loading">
+            <p>Loading scan report...</p>
+        </div>
+
+        <div id="errorMessage" class="error" style="display: none;">
+            <p>Failed to load scan report. Please try again.</p>
+        </div>
+
+        <div id="reportContent" style="display: none;">
+            <div class="scan-summary">
+                <h2>Scan Summary</h2>
+                <div class="summary-stats">
+                    <div class="stat-card">
+                        <div class="stat-number danger" id="malwareCount">0</div>
+                        <div class="stat-label">Malware Detections</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number warning" id="suspiciousCount">0</div>
+                        <div class="stat-label">Suspicious</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number success" id="cleanCount">0</div>
+                        <div class="stat-label">Clean</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalEngines">0</div>
+                        <div class="stat-label">Total Engines</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scan-results">
+                <h2>Detection Results</h2>
+                <div id="detectionResults">
+                    <div class="no-data">No detection results available</div>
+                </div>
+            </div>
+
+            <div class="scan-metadata">
+                <h2>Scan Metadata</h2>
+                <div class="metadata-grid">
+                    <div class="metadata-item">
+                        <div class="metadata-label">Scan ID</div>
+                        <div class="metadata-value" id="scanId">N/A</div>
+                    </div>
+                    <div class="metadata-item">
+                        <div class="metadata-label">Scan Date</div>
+                        <div class="metadata-value" id="scanDate">N/A</div>
+                    </div>
+                    <div class="metadata-item">
+                        <div class="metadata-label">Resource</div>
+                        <div class="metadata-value" id="resource">N/A</div>
+                    </div>
+                    <div class="metadata-item">
+                        <div class="metadata-label">Permalink</div>
+                        <div class="metadata-value" id="permalink">N/A</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="downloadBtn" class="btn">Download File</button>
+                <a id="virusTotalLink" href="#" target="_blank" class="btn">View Full Report on VirusTotal</a>
+                <button class="btn secondary" onclick="window.close()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="report.js"></script>
+</body>
+</html>
