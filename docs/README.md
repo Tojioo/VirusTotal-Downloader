@@ -7,8 +7,7 @@ A browser extension that allows you to download files and automatically submit t
 - **Right-click download**: Right-click on any link, image, video, or audio file and select "Download with VirusTotal"
 - **Automatic scanning**: Files are automatically submitted to VirusTotal for malware analysis
 - **Scan history**: View your recent scans and their VirusTotal results
-- **Advanced secure API key storage**: Choose from two security levels - browser storage or external file storage
-- **Real-time notifications**: Get notified when downloads start and scans are submitted
+- **Secure API key storage**: Choose from two options - browser storage or external file storage
 - **Cross-browser support**: Works with Chrome, Edge, and other Chromium-based browsers
 - **Modern UI with dark mode**: Clean, responsive interface with collapsible sections and dark mode support
 - **Automatic quota tracking**: Monitor your VirusTotal API usage with visual progress indicators
@@ -32,9 +31,9 @@ A browser extension that allows you to download files and automatically submit t
 
 2. **Load Extension in Browser**:
    - Open Chrome/Edge and go to `chrome://extensions/` or `edge://extensions/`
-   - Enable "Developer mode" in the top right
+   - Enable "Developer mode"
    - Click "Load unpacked"
-   - Select the `VirusTotalExtension` folder
+   - Select the `VirusTotal-Downloader` folder
    - The extension should now appear in your extensions list
 
 ## Secure API Key Storage
