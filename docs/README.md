@@ -218,8 +218,23 @@ If you encounter issues:
 
 ## Version History
 
+- **v1.1.0** (Coming Soon): Risk assessment engine and intelligent download prevention
+  - Risk scoring algorithm for VirusTotal scan results
+  - Configurable risk thresholds (Low/Medium/High/Paranoid modes)
+  - Risk-based download prevention with user override options
+  - Enhanced UI with color-coded risk indicators
+  - Whitelist/blacklist management for trusted sources
+  - Advanced analytics and threat intelligence integration
 - **v1.0.0**: Initial release with basic download and scan functionality
 
 ## License
 
-This project is open source. Feel free to modify and distribute according to your needs.
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
+
+The MIT License allows you to:
+- Use the software for any purpose
+- Modify and distribute the software
+- Include it in proprietary software
+- Sell copies of the software
+
+The only requirement is to include the original copyright notice and license terms in any copies or substantial portions of the software.

@@ -492,7 +492,7 @@ Before releasing updates:
 
 ## Version History
 
-### v1.0.0 - Initial Design System (Current)
+### v1.0.0 - Initial Design System
 
 - Established card-based layout system
 - Implemented unified color palette
@@ -526,6 +526,70 @@ The design system will evolve based on:
 
 For questions about these guidelines or suggestions for improvements, please refer to the project documentation or create an issue in the project repository.
 
-**Last Updated**: 2025-09-20  
-**Version**: 1.0.0  
-**Maintainers**: VirusTotal Downloader Team
+## Risk Assessment UI Components (v1.1.0)
+
+### Overview
+
+Version 1.1.0 introduces intelligent risk assessment capabilities with visual indicators and user controls. The design system extends existing components to support risk-based download prevention.
+
+### Risk Level Color Scheme
+
+**Risk Assessment Colors:**
+- **Clean/Safe**: Green (#28a745) - Files with no detections
+- **Low Risk**: Yellow (#ffc107) - Files detected by 3+ engines  
+- **Medium Risk**: Orange (#fd7e14) - Files detected by 2+ engines
+- **High Risk**: Red (#dc3545) - Files detected by 1+ engine
+- **Paranoid Mode**: Purple (#6f42c1) - Files with any suspicious indicators
+
+### Risk Threshold Settings
+
+**New Settings Section Components:**
+- Risk threshold selector with radio buttons or dropdown
+- Visual preview of selected risk level with color coding
+- Description text explaining each threshold level
+- Toggle for enabling/disabling risk-based prevention
+
+### Risk Indicators
+
+**Visual Risk Communication:**
+- Risk percentage badges in scan history items
+- Color-coded borders and backgrounds for risk levels
+- Progress bars showing risk scores (0-100%)
+- Warning icons for high-risk files
+
+### Warning Dialogs
+
+**Risk Warning Modal Design:**
+- Modal overlay with backdrop blur
+- Clear risk level indicator with appropriate color
+- Detailed explanation of detected threats
+- "Download Anyway" and "Cancel" action buttons
+- Educational content about risk factors
+
+### Enhanced Scan Reports
+
+**Risk Assessment Integration:**
+- Risk score display in report headers
+- Contributing factors breakdown
+- Engine consensus visualization
+- Recommendation actions based on risk level
+
+### Whitelist/Blacklist Management
+
+**Trust Management Interface:**
+- Domain whitelist input with validation
+- File type filter checkboxes
+- Hash-based exception management
+- Temporary override controls with time limits
+
+### Accessibility Enhancements
+
+**Risk Assessment Accessibility:**
+- Screen reader announcements for risk levels
+- High contrast mode support for color-blind users
+- Keyboard navigation for all risk controls
+- ARIA labels for risk indicators and warnings
+
+**Last Updated**: 2025-09-21  
+**Version**: 1.1.0 (Preparation)  
+**Maintainers**: Tojioo

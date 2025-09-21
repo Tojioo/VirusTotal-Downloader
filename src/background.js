@@ -1061,3 +1061,60 @@ chrome.runtime.onInstalled.addListener(() => {
   // Run cleanup immediately on install
   cleanupOldScans();
 });
+
+// ============================================================================
+// RISK ASSESSMENT MODULE (v1.1.0 - Planned Implementation)
+// ============================================================================
+
+// Risk assessment engine will evaluate VirusTotal scan results and provide
+// intelligent download prevention based on user-configurable thresholds
+
+/* PLANNED: Risk Assessment Engine Functions (v1.1.0)
+
+// Calculate risk score based on VirusTotal scan results
+async function calculateRiskScore(scanResults) {
+  // Implementation planned for v1.1.0
+  // - Weight detections by engine reputation
+  // - Analyze threat types (malware vs suspicious)
+  // - Consider file type risk factors
+  // - Evaluate source domain reputation
+  // - Return risk score (0-100) and risk level
+}
+
+// Check if file should be blocked based on risk threshold
+async function shouldBlockDownload(riskScore, riskLevel) {
+  // Implementation planned for v1.1.0
+  // - Load user's risk threshold setting
+  // - Compare against calculated risk level
+  // - Check whitelist/blacklist exceptions
+  // - Return boolean decision with reasoning
+}
+
+// Show risk warning dialog to user
+async function showRiskWarning(filename, riskScore, riskLevel, detectionDetails) {
+  // Implementation planned for v1.1.0
+  // - Display modal with risk information
+  // - Show detection breakdown
+  // - Provide "Download Anyway" option
+  // - Log user decision for learning
+}
+
+// Manage whitelist/blacklist for trusted sources
+async function manageSourceTrust(domain, action, duration) {
+  // Implementation planned for v1.1.0
+  // - Add/remove domains from whitelist
+  // - Handle temporary overrides
+  // - Manage hash-based exceptions
+  // - Store trust decisions securely
+}
+
+// Track risk assessment analytics
+async function trackRiskAnalytics(decision, riskScore, userOverride) {
+  // Implementation planned for v1.1.0
+  // - Record blocked vs allowed downloads
+  // - Track false positive feedback
+  // - Maintain risk trend data
+  // - Support learning algorithms
+}
+
+*/
