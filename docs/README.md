@@ -95,26 +95,28 @@ This extension offers two levels of API key security to meet different user need
 ## File Structure
 
 ```
-VirusTotalExtension/
-├── .gitignore             # Git ignore rules
-├── manifest.json          # Extension configuration
-├── package.json           # Project metadata
-├── src/                   # Main extension source files
-│   ├── background.js      # Background service worker
-│   ├── content.js         # Content script for page interaction
-│   ├── popup.html         # Extension popup interface
-│   ├── popup.js           # Popup functionality
-│   ├── report.html        # Scan report page
-│   └── report.js          # Report page functionality
-├── assets/                # Static resources
-│   └── icons/             # Extension icons
-│       ├── icon16.png     # 16x16 extension icon
-│       ├── icon48.png     # 48x48 extension icon
-│       └── icon128.png    # 128x128 extension icon
-└── docs/                  # Documentation
-    ├── README.md          # This file
-    ├── DESIGN_GUIDELINES.md # UI/UX design standards
-    └── FUTURE_PLANS.md    # Future enhancement plans
+VirusTotal-Downloader/
+├── assets/                     # Static resources
+│   └── icons/                  # Extension icons
+│       ├── icon16.png          # 16x16 extension icon
+│       ├── icon48.png          # 48x48 extension icon
+│       └── icon128.png         # 128x128 extension icon
+├── docs/                       # Documentation
+│   ├── CHANGELOG.md            # Changelog
+│   ├── DESIGN_GUIDELINES.md    # UI/UX design standards
+│   ├── FUTURE_PLANS.md         # Future enhancement plans
+│   └── README.md               # This file
+├── src/                        # Main extension source files
+│   ├── background.js           # Background service worker
+│   ├── content.js              # Content script for page interaction
+│   ├── popup.html              # Extension popup interface
+│   ├── popup.js                # Popup functionality
+│   ├── report.html             # Scan report page
+│   └── report.js               # Report page functionality
+├── .gitignore                  # Git ignore rules
+├── LICENSE                     # License file
+├── manifest.json               # Extension configuration
+└── package.json                # Project metadata
 ```
 
 ## Permissions Explained
